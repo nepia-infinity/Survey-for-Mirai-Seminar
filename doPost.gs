@@ -32,7 +32,7 @@ function doPost(e) {
         "text": "アンケートへのご協力ありがとうございました！" 
       });
     }
-  }else if(event.type === 'message'){
+  }else if(event.type === 'message' && event.message.text === '回答を始める'){
 
     line.reply(replyToken, { 
         "type": "text", 
@@ -93,29 +93,39 @@ function getSurveyConfig(id) {
 }
 
 
+
 /**
  * 次の質問メッセージを生成する
+ * postbackData が無い場合は最初の質問を返す
  */
 function getNextQuestionMessage(postbackData) {
-  // 1. data文字列を解析
-  const params = postbackData.split('&').reduce((acc, pair) => {
-    const [key, value] = pair.split('=');
-    acc[key] = value;
-    return acc;
-  }, {});
+  let nextId;
 
-  // 2. 次のIDを取得
-  const nextId = Number(params.questionId) + 1;
+  // 1. postbackData が存在するかチェック
+  if (!postbackData) {
+    // 存在しない（undefinedや空文字）場合は最初の質問IDを設定
+    nextId = 1;
+  } else {
+    // 2. data文字列を解析
+    const params = postbackData.split('&').reduce((acc, pair) => {
+      const [key, value] = pair.split('=');
+      acc[key] = value;
+      return acc;
+    }, {});
+
+    // 3. 次のIDを計算
+    nextId = params.questionId ? Number(params.questionId) + 1 : 1;
+  }
   
-  // 3. 設定を取得（ここで返ってくるのは q1Config と同じ構造）
+  // 4. 設定を取得
   const config = getSurveyConfig(nextId);
 
-  // 4. 設定があればFlex Message化、なければnull
+  // 5. 設定があればFlex Message化、なければnull（アンケート終了）
   if (config) {
     return {
       "type": "flex",
-      "altText": `アンケート回答中 (${nextId})`,
-      "contents": getSurveyJson(config) // そのまま渡す
+      "altText": nextId === 1 ? "アンケートを開始します" : `アンケート回答中 (${nextId})`,
+      "contents": getSurveyJson(config)
     };
   }
 

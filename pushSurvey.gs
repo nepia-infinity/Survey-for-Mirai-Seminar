@@ -49,7 +49,7 @@ function buildSurveyMessage(){
           "contents": [
             {
               "type": "icon",
-              "url": "https://developers-resource.landpress.line.me/fx/img/review_gold_star_28.png",
+              "url": "https://img.icons8.com/material-outlined/24/aaaaaa/clock--v1.png",
               "size": "sm"
             },
             {

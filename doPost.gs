@@ -20,12 +20,10 @@ function doPost(e) {
     const nextMessage = getNextQuestionMessage(event.postback.data);
     
     if (nextMessage) {
-
       // クラスの reply メソッドを使用
       line.reply(replyToken, nextMessage);
 
     }else {
-
       // 全質問終了時もクラスの reply メソッドを使用
       line.reply(replyToken, { 
         "type": "text", 
@@ -34,10 +32,13 @@ function doPost(e) {
     }
   }else if(event.type === 'message' && event.message.text === '回答を始める'){
 
-    line.reply(replyToken, { 
-        "type": "text", 
-        "text": "GASに届いたよ！！" 
-      });
+    // 最初の質問を取得
+    const firstMessage = getNextQuestionMessage();
+    if (firstMessage) {
+      // クラスの reply メソッドを使用
+      line.reply(replyToken, firstMessage);
+
+    }
   }
 
   // シートにeventを記載
@@ -131,6 +132,7 @@ function getNextQuestionMessage(postbackData) {
 
   return null;
 }
+
 
 
 /**

@@ -91,9 +91,9 @@ function buildSurveyMessage(){
           "height": "sm",
           "color": "#1DB446",
           "action": {
-            "type": "uri",
+            "type": "message",
             "label": "回答を始める",
-            "uri": "https://example.com/survey"
+            "text": "回答を始める"
           }
         }
       ],

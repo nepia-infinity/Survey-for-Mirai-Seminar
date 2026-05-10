@@ -78,14 +78,39 @@ function getSurveyConfig(id) {
       };
     case 3:
       return {
-        questionTitle: "質問3：日本の好きなところは？",
+        questionTitle: "質問3：日本のどこが好き？",
         questionId: 3,
         progress: 3,
         choices: [
-          { label: "ごはんが美味しい", value: "ごはんが美味しい" },
-          { label: "時間に正確なところ", value: "時間が正確なところ" },
-          { label: "街が比較的清潔なところ", value: "街が比較的清潔なところ" },
-          { label: "犯罪が少ないところ", value: "犯罪が少ないところ" }
+          { label: "ごはんが美味しい", value: "食" },
+          { label: "治安が良くて綺麗", value: "安心" },
+          { label: "アニメ・文化", value: "文化" },
+          { label: "生活が便利", value: "便利" }
+        ]
+      };
+    case 4:
+      // インタビュー前に「関心の方向性」を探る質問を追加
+      return {
+        questionTitle: "質問4：今、一番関心があることは？",
+        questionId: 4,
+        progress: 4,
+        choices: [
+          { label: "仕事・キャリア", value: "キャリア" },
+          { label: "趣味・遊び", value: "趣味" },
+          { label: "将来のお金のこと", value: "お金" },
+          { label: "人間関係・恋愛", value: "人間関係" }
+        ]
+      };
+    case 5:
+      // 最後にインタビューの打診
+      return {
+        questionTitle: "質問5：もっと詳しくお話聞けますか？",
+        questionId: 5,
+        progress: 5,
+        choices: [
+          { label: "ぜひ！協力します", value: "Yes" },
+          { label: "オンラインならOK", value: "OnlineOnly" },
+          { label: "今回は難しいです", value: "No" }
         ]
       };
     default:

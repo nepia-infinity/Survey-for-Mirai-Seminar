@@ -188,11 +188,7 @@ class SpreadsheetUtils {
         return false;
       }
 
-      // '' が含まれているので消す
-      const filtered = lastRowArray.filter(value => value);
-
-      // questionIdが1の時のみ例外的な処理をするため、1を引く
-      const targetColumn = filtered.length + Number(questionId) -1;
+      const targetColumn = Number(questionId) + 2;
       console.log(`targetColumn: ${targetColumn}`);
 
       const targetRow = rowIndex + 1;

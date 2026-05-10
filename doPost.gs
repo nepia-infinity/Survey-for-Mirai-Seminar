@@ -267,8 +267,8 @@ function createScheduleFlexMessage() {
           "type": "box",
           "layout": "vertical",
           "contents": [
-            { "type": "text", "text": "Schedule", "color": "#ffffff66", "size": "sm" },
-            { "type": "text", "text": "今後の予定について", "color": "#ffffff", "size": "xl", "flex": 4, "weight": "bold" }
+            { "type": "text", "text": "Vision", "color": "#ffffff66", "size": "sm" },
+            { "type": "text", "text": "日本を選びたい若者を作る", "color": "#ffffff", "size": "xl", "flex": 4, "weight": "bold" }
           ]
         }
       ],
@@ -282,7 +282,7 @@ function createScheduleFlexMessage() {
       "type": "box",
       "layout": "vertical",
       "contents": [
-        { "type": "text", "text": "Total: 7 Months", "color": "#b7b7b7", "size": "xs" },
+        { "type": "text", "text": "Schedule", "color": "#b7b7b7", "size": "xs" },
         {
           "type": "box",
           "layout": "horizontal",

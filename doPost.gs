@@ -39,7 +39,7 @@ function doPost(e) {
       line.reply(replyToken, firstMessage);
 
     }
-  }else if(event.type === 'message' && event.message.text === '今後のスケジュール感'){
+  }else if(event.type === 'message' && event.message.text === '今後のスケジュール'){
 
     // 関数からタイムラインを取得
     const message = createScheduleFlexMessage();
@@ -245,214 +245,223 @@ function getSurveyJson(config) {
 
 
 /**
- * ご提示いただいた最新のJSON構造をそのまま返す関数
+ * TRANSIT風タイムライン（ズレ修正版）
+ *
+ * ポイント：
+ * - 中央軸を width: 12px で統一
+ * - 丸行 / 線行 で同じカラム構成に統一
+ * - filler は残しつつ、中央カラムだけ固定幅
  */
 function createScheduleFlexMessage() {
+  const TIMELINE_WIDTH = "12px";
+
+  /**
+   * 丸アイコン付き行
+   */
+  function createPointRow(label, text, color) {
+    return {
+      type: "box",
+      layout: "horizontal",
+      spacing: "md",
+      contents: [
+        {
+          type: "text",
+          text: label,
+          size: "sm",
+          gravity: "center",
+          flex: 2
+        },
+        {
+          type: "box",
+          layout: "vertical",
+          width: TIMELINE_WIDTH,
+          flex: 0,
+          contents: [
+            { type: "filler" },
+            {
+              type: "box",
+              layout: "vertical",
+              contents: [],
+              width: "12px",
+              height: "12px",
+              cornerRadius: "30px",
+              borderWidth: "2px",
+              borderColor: color
+            },
+            { type: "filler" }
+          ]
+        },
+        {
+          type: "text",
+          text,
+          size: "sm",
+          gravity: "center",
+          weight: "bold",
+          flex: 7
+        }
+      ]
+    };
+  }
+
+  /**
+   * 縦線付き行
+   */
+  function createLineRow(text, color, height = "30px") {
+    return {
+      type: "box",
+      layout: "horizontal",
+      height,
+      spacing: "md",
+      contents: [
+        // 上のラベル列と同じ flex:2 に揃える
+        {
+          type: "box",
+          layout: "baseline",
+          contents: [{ type: "filler" }],
+          flex: 2
+        },
+
+        // 中央軸（固定幅）
+        {
+          type: "box",
+          layout: "vertical",
+          width: TIMELINE_WIDTH,
+          flex: 0,
+          alignItems: "center",
+          contents: [
+            {
+              type: "box",
+              layout: "vertical",
+              contents: [],
+              width: "2px",
+              backgroundColor: color,
+              flex: 1
+            }
+          ]
+        },
+
+        {
+          type: "text",
+          text,
+          size: "xs",
+          color: "#8c8c8c",
+          gravity: "center",
+          flex: 7
+        }
+      ]
+    };
+  }
+
   const flexContents = {
-    "type": "bubble",
-    "size": "mega",
-    "header": {
-      "type": "box",
-      "layout": "vertical",
-      "contents": [
+    type: "bubble",
+    size: "mega",
+
+    header: {
+      type: "box",
+      layout: "vertical",
+      paddingAll: "20px",
+      paddingTop: "22px",
+      spacing: "md",
+      height: "154px",
+      backgroundColor: "#0367D3",
+      contents: [
         {
-          "type": "box",
-          "layout": "vertical",
-          "contents": [
-            { "type": "text", "text": "#Team 6", "color": "#ffffff66", "size": "sm" },
-            { "type": "text", "text": "ここにチーム名", "color": "#ffffff", "size": "xl", "flex": 4, "weight": "bold" }
+          type: "box",
+          layout: "vertical",
+          contents: [
+            {
+              type: "text",
+              text: "#Team 6",
+              color: "#ffffff66",
+              size: "sm"
+            },
+            {
+              type: "text",
+              text: "ここにチーム名",
+              color: "#ffffff",
+              size: "xl",
+              weight: "bold"
+            }
           ]
         },
         {
-          "type": "box",
-          "layout": "vertical",
-          "contents": [
-            { "type": "text", "text": "Vision", "color": "#ffffff66", "size": "sm" },
-            { "type": "text", "text": "日本を選びたい若者を作る", "color": "#ffffff", "size": "xl", "flex": 4, "weight": "bold" }
+          type: "box",
+          layout: "vertical",
+          contents: [
+            {
+              type: "text",
+              text: "Vision",
+              color: "#ffffff66",
+              size: "sm"
+            },
+            {
+              type: "text",
+              text: "日本を選びたい若者を作る",
+              color: "#ffffff",
+              size: "xl",
+              weight: "bold"
+            }
           ]
         }
-      ],
-      "paddingAll": "20px",
-      "backgroundColor": "#0367D3",
-      "spacing": "md",
-      "height": "154px",
-      "paddingTop": "22px"
+      ]
     },
-    "body": {
-      "type": "box",
-      "layout": "vertical",
-      "contents": [
-        { "type": "text", "text": "Schedule", "color": "#b7b7b7", "size": "xs" },
+
+    body: {
+      type: "box",
+      layout: "vertical",
+      contents: [
         {
-          "type": "box",
-          "layout": "horizontal",
-          "contents": [
-            { "type": "text", "text": "DRAFT", "size": "sm", "gravity": "center", "flex": 2 },
-            {
-              "type": "box",
-              "layout": "vertical",
-              "contents": [
-                { "type": "filler" },
-                { "type": "box", "layout": "vertical", "contents": [], "cornerRadius": "30px", "height": "12px", "width": "12px", "borderColor": "#EF454D", "borderWidth": "2px" },
-                { "type": "filler" }
-              ],
-              "flex": 1
-            },
-            { "type": "text", "text": "3月〜4月：応募期間", "gravity": "center", "flex": 7, "size": "sm", "weight": "bold" }
-          ],
-          "spacing": "md",
-          "margin": "xl"
+          type: "text",
+          text: "Schedule",
+          color: "#b7b7b7",
+          size: "xs"
         },
-        {
-          "type": "box",
-          "layout": "horizontal",
-          "contents": [
-            { "type": "filler", "flex": 2 },
-            {
-              "type": "box",
-              "layout": "vertical",
-              "contents": [
-                {
-                  "type": "box",
-                  "layout": "horizontal",
-                  "contents": [
-                    { "type": "filler" },
-                    { "type": "box", "layout": "vertical", "contents": [], "width": "2px", "backgroundColor": "#B7B7B7" },
-                    { "type": "filler" }
-                  ],
-                  "flex": 1
-                }
-              ],
-              "flex": 1
-            },
-            { "type": "text", "text": "・勉強会イベント", "gravity": "center", "flex": 7, "size": "xs", "color": "#8c8c8c" }
-          ],
-          "height": "40px"
-        },
-        {
-          "type": "box",
-          "layout": "horizontal",
-          "contents": [
-            { "type": "text", "text": "BUILD", "size": "sm", "gravity": "center", "flex": 2 },
-            {
-              "type": "box",
-              "layout": "vertical",
-              "contents": [
-                { "type": "filler" },
-                { "type": "box", "layout": "vertical", "contents": [], "cornerRadius": "30px", "width": "12px", "height": "12px", "borderWidth": "2px", "borderColor": "#6486E3" },
-                { "type": "filler" }
-              ],
-              "flex": 1
-            },
-            { "type": "text", "text": "5月〜7月：構想・具体化", "gravity": "center", "flex": 7, "size": "sm", "weight": "bold" }
-          ],
-          "spacing": "md"
-        },
-        {
-          "type": "box",
-          "layout": "horizontal",
-          "contents": [
-            { "type": "filler", "flex": 2 },
-            {
-              "type": "box",
-              "layout": "vertical",
-              "contents": [
-                {
-                  "type": "box",
-                  "layout": "horizontal",
-                  "contents": [
-                    { "type": "filler" },
-                    { "type": "box", "layout": "vertical", "contents": [], "width": "2px", "backgroundColor": "#6486E3" },
-                    { "type": "filler" }
-                  ],
-                  "flex": 1
-                }
-              ],
-              "flex": 1
-            },
-            { "type": "text", "text": "・キックオフセミナー", "gravity": "center", "flex": 7, "size": "xs", "color": "#8c8c8c" }
-          ],
-          "height": "30px"
-        },
-        {
-          "type": "box",
-          "layout": "horizontal",
-          "contents": [
-            { "type": "filler", "flex": 2 },
-            {
-              "type": "box",
-              "layout": "vertical",
-              "contents": [
-                {
-                  "type": "box",
-                  "layout": "horizontal",
-                  "contents": [
-                    { "type": "filler" },
-                    { "type": "box", "layout": "vertical", "contents": [], "width": "2px", "backgroundColor": "#6486E3" },
-                    { "type": "filler" }
-                  ],
-                  "flex": 1
-                }
-              ],
-              "flex": 1
-            },
-            { "type": "text", "text": "・定期メンタリング①〜③", "gravity": "center", "flex": 7, "size": "xs", "color": "#8c8c8c" }
-          ],
-          "height": "30px"
-        },
-        {
-          "type": "box",
-          "layout": "horizontal",
-          "contents": [
-            { "type": "filler", "flex": 2 },
-            {
-              "type": "box",
-              "layout": "vertical",
-              "contents": [
-                {
-                  "type": "box",
-                  "layout": "horizontal",
-                  "contents": [
-                    { "type": "filler" },
-                    { "type": "box", "layout": "vertical", "contents": [], "width": "2px", "backgroundColor": "#6486E3" },
-                    { "type": "filler" }
-                  ],
-                  "flex": 1
-                }
-              ],
-              "flex": 1
-            },
-            { "type": "text", "text": "・最終発表会", "gravity": "center", "flex": 7, "size": "xs", "color": "#8c8c8c" }
-          ],
-          "height": "30px"
-        },
-        {
-          "type": "box",
-          "layout": "horizontal",
-          "contents": [
-            { "type": "text", "text": "GOAL", "gravity": "center", "size": "sm", "flex": 2 },
-            {
-              "type": "box",
-              "layout": "vertical",
-              "contents": [
-                { "type": "filler" },
-                { "type": "box", "layout": "vertical", "contents": [], "cornerRadius": "30px", "width": "12px", "height": "12px", "borderColor": "#8E44AD", "borderWidth": "2px" },
-                { "type": "filler" }
-              ],
-              "flex": 1
-            },
-            { "type": "text", "text": "8月〜9月：ビジコン応募", "gravity": "center", "flex": 7, "size": "sm", "weight": "bold" }
-          ],
-          "spacing": "md"
-        }
+
+        createPointRow(
+          "DRAFT",
+          "3月〜4月：応募期間",
+          "#EF454D"
+        ),
+
+        createLineRow(
+          "・勉強会イベント",
+          "#B7B7B7",
+          "40px"
+        ),
+
+        createPointRow(
+          "BUILD",
+          "5月〜7月：構想・具体化",
+          "#6486E3"
+        ),
+
+        createLineRow(
+          "・キックオフセミナー",
+          "#6486E3"
+        ),
+
+        createLineRow(
+          "・定期メンタリング①〜③",
+          "#6486E3"
+        ),
+
+        createLineRow(
+          "・最終発表会",
+          "#6486E3"
+        ),
+
+        createPointRow(
+          "GOAL",
+          "8月〜9月：ビジコン応募",
+          "#8E44AD"
+        )
       ]
     }
   };
 
-  // メッセージ形式でラップして返す
   return {
-    "type": "flex",
-    "altText": "スケジュール共有",
-    "contents": flexContents
+    type: "flex",
+    altText: "スケジュール共有",
+    contents: flexContents
   };
 }

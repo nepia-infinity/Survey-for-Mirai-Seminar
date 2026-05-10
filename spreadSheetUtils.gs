@@ -182,6 +182,12 @@ class SpreadsheetUtils {
       const lastRowArray = this.values.slice(rowIndex)[0];
       console.log(lastRowArray);
 
+      // 回答がすでに記載済みの場合は転機処理をスキップする 
+      // LINE Flex Messageの選択肢は何度でもタッチが可能で、その度に記録されるとデータが歪んでしまうため。
+      if(lastRowArray.indexOf(newValue) !== -1){
+        return false;
+      }
+
       // '' が含まれているので消す
       const filtered = lastRowArray.filter(value => value);
 

@@ -26,7 +26,7 @@ function saveSurveyRecords(event){
 
     }else if(1 < Number(answersObj.questionId)){
 
-      // 既存行を更新する
+      // 2問目以降の場合、アンケート用シートの既存行を更新する
       utils.updateCell(userId, 1, answersObj.questionId, answersObj.value);
     }
   }catch(error){

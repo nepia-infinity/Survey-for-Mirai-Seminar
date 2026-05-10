@@ -89,7 +89,7 @@ function buildSurveyMessage(){
           "type": "button",
           "style": "primary",
           "height": "sm",
-          "color": "#1DB446",
+          "color": "#129789",
           "action": {
             "type": "message",
             "label": "回答を始める",

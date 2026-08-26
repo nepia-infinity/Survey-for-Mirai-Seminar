@@ -4,7 +4,7 @@
  * 
  */
 function saveSurveyRecords(event){
-  const sheetUrl = "https://docs.google.com/spreadsheets/d/1Mn7JovAyXBn0GvpPXUJ2AYNBgLPcS5V9wWG0Yc-ONHo/edit?gid=1539364166#gid=1539364166";
+  const sheetUrl = PropertiesService.getScriptProperties().getProperty('SURVEY_RESULTS_SHEET_URL');
 
   try {
     // SpreadsheetUtilsクラスのインスタンスを作成

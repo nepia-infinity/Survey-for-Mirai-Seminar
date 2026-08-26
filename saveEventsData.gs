@@ -1,6 +1,6 @@
 function saveEventsData(e) {
   // 1. 対象のスプレッドシートURLを指定
-  const sheetUrl = 'https://docs.google.com/spreadsheets/d/1Mn7JovAyXBn0GvpPXUJ2AYNBgLPcS5V9wWG0Yc-ONHo/edit?gid=0#gid=0';
+  const sheetUrl = PropertiesService.getScriptProperties().getProperty('LOG_SHEET_URL');
 
   try {
     // 2. SpreadsheetUtilsクラスのインスタンスを作成
